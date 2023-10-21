@@ -1,7 +1,9 @@
 package Number;
 
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 
 public class ThreeSum {
@@ -10,7 +12,7 @@ public class ThreeSum {
         if (length < 3) {
             return null;
         }
-        List<List<Integer>> res = new ArrayList<List<Integer>>();
+        List<List<Integer>> res = new LinkedList<>();
         if (length == 3) {
             if ((nums[0] + nums[1] + nums[2]) == 0) {
                 List<Integer> list = new ArrayList<>();
@@ -20,47 +22,39 @@ public class ThreeSum {
                 res.add(list);
             }
         } else {
-            List<String> listHashCode = new ArrayList<>();
-            for (int i = 0; i < length; i++) {
-                List<Integer> list = twoSum(nums, i);
-                if (list != null) {
-                    String hashCode = hashCode(list);
-                    if (!listHashCode.contains(hashCode)) {
-                        res.add(list);
-                        listHashCode.add(hashCode);
+            Arrays.sort(nums);
+            HashSet<List<Integer>> hashSet = new HashSet<>();
+            int left, right, sum;
+            for (int i = 0; i < length - 1; i++) {
+                left = i + 1;
+                right = length - 1;
+                while (left < right) {
+                    sum = nums[i] + nums[left] + nums[right];
+                    if (sum == 0) {
+                        List<Integer> list = new ArrayList<>();
+                        list.add(nums[i]);
+                        list.add(nums[left]);
+                        list.add(nums[right]);
+                        hashSet.add(list);
+                        left++;
+                        right--;
+                    } else if (sum < 0) {
+                        left++;
+                    } else {
+                        right--;
                     }
                 }
             }
+            res.addAll(hashSet);
         }
         return res;
     }
 
-    public List<Integer> twoSum(int[] nums, int index) {
-        int target = 0 - nums[index];
-        int sub;
-        for (int i = 0; i < nums.length; i++) {
-            if (i == index)
-                continue;
-            sub = target - nums[i];
-            for (int j = 0; j < nums.length && j != i; j++) {
-                if (nums[j] == sub && j != index) {
-                    List<Integer> list = new ArrayList<>();
-                    list.add(0 - nums[index]);
-                    list.add(nums[j]);
-                    list.add(nums[i]);
-
-                }
-            }
-        }
-        return null;
-    }
-
-    public String hashCode(List<Integer> list) {
-        Collections.sort(list);
-        String hashCode = "";
-        for (Integer x : list) {
-            hashCode += x.toString();
-        }
-        return hashCode;
-    }
+    // public String hashCode(int[] nums) {
+    // String hashCode = "";
+    // for (int i = 0; i < 3; i++) {
+    // hashCode += nums[i];
+    // }
+    // return hashCode;
+    // }
 }
