@@ -6,8 +6,10 @@ public class SortAnArray {
         return nums;
     }
 
+    // QUICK SORT
     public void quickSort(int[] nums) {
-        quickSortRange(nums, 0, nums.length - 1);
+        if (nums != null)
+            quickSortRange(nums, 0, nums.length - 1);
     }
 
     public void quickSortRange(int[] nums, int begin, int end) {
@@ -30,6 +32,52 @@ public class SortAnArray {
         }
         swap(nums, indexPivot, end);
         return end;
+    }
+
+    // MERGE SORT
+    public void mergeSort(int[] nums) {
+        if (nums != null)
+            mergeSortRange(nums, 0, nums.length - 1);
+    }
+
+    public void mergeSortRange(int[] nums, int beg, int end) {
+        if (beg < end) {
+            int mid = (beg + end) / 2;
+            mergeSortRange(nums, beg, mid);
+            mergeSortRange(nums, mid + 1, end);
+            merge(nums, beg, mid, end);
+        }
+    }
+
+    public void merge(int[] nums, int beg, int mid, int end) {
+        int cLeft = beg;
+        int cRight = mid + 1;
+        int count = 0;
+        int[] temp = new int[end - beg + 1];
+        while (cLeft <= mid && cRight <= end) {
+            if (nums[cLeft] < nums[cRight]) {
+                temp[count] = nums[cLeft];
+                cLeft++;
+            } else {
+                temp[count] = nums[cRight];
+                cRight++;
+            }
+            count++;
+        }
+        while (cLeft <= mid) {
+            temp[count] = nums[cLeft];
+            cLeft++;
+            count++;
+        }
+        while (cRight <= end) {
+            temp[count] = nums[cRight];
+            cRight++;
+            count++;
+        }
+        for (int x : temp) {
+            nums[beg] = x;
+            beg++;
+        }
     }
 
     public void swap(int[] nums, int index1, int index2) {
